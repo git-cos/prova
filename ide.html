@@ -1,0 +1,87 @@
+<!DOCTYPE html> 
+<html lang="it"> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <title>Mini IDE con CodeMirror</title> 
+        <!-- CodeMirror CSS --> 
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"> 
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material-darker.min.css"> 
+         <!-- CodeMirror JS --> 
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script> 
+          <!-- Modalità HTML --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script> 
+        <!-- Addon per chiusura tag --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script> 
+        <!-- Addon per chiusura parentesi --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script> 
+        <!-- Autocomplete --> <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css"> 
+        <style> 
+        body { margin: 0; font-family: Arial, sans-serif; display: flex; height: 100vh; overflow: hidden; } 
+        #editor-container, #preview { flex: 1; padding: 10px; box-sizing: border-box; } 
+        #preview { border-left: 2px solid #333; background: #fafafa; } 
+        iframe { width: 100%; height: 100%; border: none; background: white; } 
+        h2 {
+            display: block; 
+            height: 20px; 
+            position: fixed; 
+            top: calc(100% - 180px); 
+            left: calc(50% - 260px);
+            cursor: pointer; 
+            user-select: none;
+        }
+        h2:hover{
+            box-shadow: 0 0 30px 0 violet;
+        }
+        </style> 
+        </head> 
+        <body> 
+            <p style="display: block; position: fixed; ">Ciao! Scrivi HTML qui sotto e vedi l'anteprima live a destra.</p>
+            <hr>
+            <div id="editor-container"> 
+            <textarea id="code"></textarea> 
+    </div> 
+    <h2 onclick="scarica()">Scarica TXT</h2>
+    <div id="preview"> 
+        <iframe id="output">
+
+        </iframe> 
+    </div> 
+    
+
+    <script>
+        function scarica() {
+            const contenuto = document.getElementById("code").value;
+
+            // Creiamo un blob con il contenuto
+            const blob = new Blob([contenuto], { type: "text/plain" });
+
+            // Creiamo un link temporaneo
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "testo_utente.txt";
+
+            // Simuliamo il click
+            link.click();
+
+            // Pulizia
+            URL.revokeObjectURL(link.href);
+        }
+    </script>
+    <script> 
+    // Inizializza CodeMirror 
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), { 
+        lineNumbers: true, mode: "htmlmixed", theme: "material-darker", autoCloseTags: true, autoCloseBrackets: true, extraKeys: { "Ctrl-Space": "autocomplete" } }); 
+        // Funzione per aggiornare l'anteprima 
+        function updatePreview() { 
+            const iframe = document.getElementById("output"); 
+            const doc = iframe.contentDocument || iframe.contentWindow.document; doc.open(); 
+            doc.write(editor.getValue());
+            doc.close(); } 
+            // Aggiorna anteprima live 
+            editor.on("change", updatePreview); 
+            // Aggiorna subito all'avvio 
+            updatePreview(); 
+            </script> 
+            </body> 
+            </html>
