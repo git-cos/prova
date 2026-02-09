@@ -1,0 +1,101 @@
+<!DOCTYPE html> 
+<html>
+    <head> 
+        <meta charset="UTF-8"> 
+        <title>IDE per HTMl</title> 
+        <link rel="icon" type="image/png" href="vsc.png">
+        <style>
+            button, img{
+                cursor: pointer;
+            }
+            
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"> 
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material-darker.min.css"> 
+         <!-- CodeMirror JS --> 
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script> 
+        <!-- Addon per chiusura tag --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script> 
+        <!-- Addon per chiusura parentesi --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script> 
+        <!-- Autocomplete --> <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css"> 
+          <!-- Modalità HTML --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script> 
+    </head> 
+    <body>
+        <div id="tutto">
+        <input type="file" id="fileInput" style="display:none;">
+        <h1>Scrivi qua sotto il codice html</h1>
+        <hr>
+        <h3><b>Progetto: </b><span id="progetto"></span></h3>
+        <div id="editor-container">
+        <textarea style="background-color: black; color: white;" rows="20" cols="160" id="code" placeholder="scrivi qui l'html"></textarea>
+    </div>
+    <br>
+    <img src="download.png" style="height: 30; width: 60;" onclick="scarica()">
+    <img src="edit.png" style="height: 30; width: 30;" onclick="edit()">
+    <img src="ef.png" onclick="ef()" style="height: 30; width: 30;" >
+    <h2></h2>
+    <br>
+        <button onclick="invia()" accesskey="Alt+z">Esegui il codice</button>
+    </div>
+        <h3>Codice eseguito:</h3> 
+        <hr>
+        <div id="eseguito"></div> 
+        <script>
+        function scarica() {
+            const contenuto = document.getElementById("code").value;
+
+            // Creiamo un blob con il contenuto
+            const blob = new Blob([contenuto], { type: "text/plain" });
+
+            // Creiamo un link temporaneo
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = nomeprogetto + ".html";
+
+            // Simuliamo il click
+            link.click();
+
+            // Pulizia
+            URL.revokeObjectURL(link.href);
+        }
+    </script>
+    <script>
+        function app() {
+            const contenuto = document.getElementById("code").value;
+
+            // Creiamo un blob con il contenuto
+            const blob = new Blob([contenuto], { type: "text/plain" });
+
+            // Creiamo un link temporaneo
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = nomeprogetto + ".html";
+
+            // Simuliamo il click
+            link.click();
+
+            // Pulizia
+            URL.revokeObjectURL(link.href);
+        }
+    </script>
+        <script>
+            var nomeprogetto = window.prompt("Scrivi qui sotto il nome del progetto");
+            document.getElementById("progetto").innerHTML = nomeprogetto;
+            function invia(){
+                var codice = document.getElementById("code").value; 
+                document.getElementById("eseguito").innerHTML = codice;
+            }
+            function ef(){
+                document.getElementById('fileInput').click();
+            }
+            function edit(){
+                var nomeprogetto = window.prompt("Modifica il nome del progetto")
+                document.getElementById("progetto").innerHTML = nomeprogetto;
+            } 
+            </script>
+         </body>
+</html>
